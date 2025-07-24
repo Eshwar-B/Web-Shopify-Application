@@ -1,0 +1,29 @@
+package com.shopify.repo;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.shopify.entity.Product;
+
+public interface ProductRepository extends JpaRepository<Product, Long>{
+
+    Product findByProductId(Long productId);
+
+    Product findByProductName(String productName);
+
+    Product findByProductCategory(String productCategory);
+
+    Product findByProductPrice(Double productPrice);
+
+    Product findByProductDescription(String productDescription);
+
+    // Find all products by imageUrl
+    List<Product> findByImageUrl(String imageUrl);
+
+    // Find all products by createdDate
+    List<Product> findByCreatedDate(java.time.LocalDateTime createdDate);
+
+    // Find all products by updateDate
+    List<Product> findByUpdateDate(java.time.LocalDateTime updateDate);
+}

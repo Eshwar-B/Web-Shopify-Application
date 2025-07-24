@@ -1,0 +1,5 @@
+package com.shopify.config;
+
+public class UesrConfiguration {
+
+}

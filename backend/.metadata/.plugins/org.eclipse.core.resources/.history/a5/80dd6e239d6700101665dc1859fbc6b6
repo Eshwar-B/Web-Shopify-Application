@@ -1,0 +1,21 @@
+package com.shopify.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.shopify.entity.Product;
+import com.shopify.repo.ProductRepository;
+
+@Service
+public class ProductService {
+
+	@Autowired
+	private ProductRepository productRepo;
+
+	public Product saveProduct(Product product) {
+		return productRepo.save(product);
+	}
+
+	
+
+}

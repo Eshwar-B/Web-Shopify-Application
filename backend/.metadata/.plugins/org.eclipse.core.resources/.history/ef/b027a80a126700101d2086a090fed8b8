@@ -1,0 +1,118 @@
+package com.shopify.service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.shopify.entity.User;
+import com.shopify.repo.UserRepository;
+
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public User createUser(User user) {
+        if (userRepo.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email already exists");
+        }
+        if (userRepo.existsByPhone(user.getPhone())) {
+            throw new RuntimeException("Phone number already exists");
+        }
+        if (userRepo.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Username already exists");
+        }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        return userRepo.save(user);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
+    }
+
+    public User getUserById(Long uid) {
+        return userRepo.findByUid(uid)
+            .orElseThrow(() -> new RuntimeException("User not found with ID: " + uid));
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepo.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepo.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found with username: " + username));
+    }
+
+    public User updateUserById(Long id, User user) {
+        User existingUser = getUserById(id);
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPhone(user.getPhone());
+
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        existingUser.setUpdatedAt(LocalDateTime.now());
+
+        return userRepo.save(existingUser);
+    }
+
+    public User updateUserByEmail(String email, User user) {
+        User existingUser = getUserByEmail(email);
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setPhone(user.getPhone());
+
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
+
+        existingUser.setUpdatedAt(LocalDateTime.now());
+
+        return userRepo.save(existingUser);
+    }
+
+    public void deleteUserById(Long id) {
+        User user = getUserById(id);
+        userRepo.deleteById(id);
+    }
+
+    public void deleteUserByEmail(String email) {
+        if (!userRepo.existsByEmail(email)) {
+            throw new RuntimeException("User not found with email: " + email);
+        }
+        userRepo.deleteByEmail(email);
+    }
+
+    public List<User> getUsersByCreatedAfter(LocalDateTime createdAt) {
+        return userRepo.findByCreatedAtAfter(createdAt);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepo.existsByEmail(email);
+    }
+
+    public boolean existsByPhone(String phone) {
+        return userRepo.existsByPhone(phone);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepo.existsByUsername(username);
+    }
+}
