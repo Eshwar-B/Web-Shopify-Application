@@ -1,0 +1,12 @@
+{
+  "status": "init",
+  "executionArgs": {
+    "projectName": "03-order-service",
+    "projectPath": "D:/advancedJava/Java springboot projects/web-shopify ecommerce application/backend/03-order-service",
+    "testIds": [],
+    "additionalInstruction": "Generate and execute backend tests for all available endpoints using the current data in the database.",
+    "envs": {
+      "API_KEY": "sk-user-QxnqwSvtZ1IuQ2mLOIxJEX2HFDi4bt9KVpeSU1eSNOrFWPgOJFZZa46PzbSmIusGYfCcyH3vCqjuEFHxKCjXo3RdqqwUf2N0Qc-Jb35CcgCLuSxoteFpOmL4-tbGLX-DHWI"
+    }
+  }
+}
